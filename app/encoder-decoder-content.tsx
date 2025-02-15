@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
+import emojiRegex from "emoji-regex"
+import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { CardContent } from "@/components/ui/card"
 import { Switch } from "@/components/ui/switch"
@@ -77,6 +79,22 @@ export function Base64EncoderDecoderContent() {
         onEmojiSelect={setSelectedEmoji}
         selectedEmoji={selectedEmoji}
         emojiList={EMOJI_LIST}
+        disabled={!isEncoding}
+      />
+
+      <div className="font-bold text-sm">Or use a custom emoji</div>
+      <Input
+        value={selectedEmoji}
+        onChange={(e) => {
+          const emoji = e.target.value
+          const matches = [...emoji.matchAll(emojiRegex())];
+          if (
+            emoji.length === 0
+            || (matches.length === 1 && matches[0][0] === emoji)
+          ) {
+            setSelectedEmoji(emoji)
+          }
+        }}
         disabled={!isEncoding}
       />
 
